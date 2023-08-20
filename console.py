@@ -123,7 +123,6 @@ class HBNBCommand(cmd.Cmd):
 
             # split arg into a list
             split_args = args.split(' ') 
-            params = split_args[1:] 
             
             # create instance of specified class
             new_instance = eval('{}()'.format(split_args[0]))
