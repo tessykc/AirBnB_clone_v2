@@ -123,14 +123,7 @@ class HBNBCommand(cmd.Cmd):
 
             # split arg into a list
             split_args = args.split(' ') 
-            params = split_args[1:]
-
-            # extract class name from first element of the list
-            class_name = split_args[0]
-            
-            # check if class name exist in availabl;e classess
-            if class_name not in HBNBCommand.classes:
-                raise NameError("** class doesn't exist **")
+            params = split_args[1:] 
             
             # create instance of specified class
             new_instance = eval('{}()'.format(split_args[0]))
@@ -161,7 +154,7 @@ class HBNBCommand(cmd.Cmd):
         except SyntaxError as e:
             print(e)
         except NameError as e:
-            print(e)
+            print("** class doesn't exist **")
 
     def help_create(self):
         """ Help information for the create method """
