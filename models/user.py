@@ -2,6 +2,7 @@
 """This module defines a class User"""
 from models.base_model import BaseModel, Base
 from models.place import Place
+from models.review import Review
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 
@@ -17,4 +18,5 @@ class User(BaseModel, Base):
     """relationship with the class Place"""
     places = relationship(Place, cascade='all, delete' backref='user')
 
-    
+    """relationship with the class Review"""
+    reviews = relationship(Review, cascade='all, delete' backref='user')
