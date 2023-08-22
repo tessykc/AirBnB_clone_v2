@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 
 class State(BaseModel, Base):
     """ State class """
-    name = ""
+    # name = ""
     __tablename__ = 'states'
     name = Column(String (128), nullable=False)
     for DBStorage:
