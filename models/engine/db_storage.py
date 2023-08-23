@@ -15,7 +15,7 @@ class DBStorage:
     __engine = None
     __session = None
 
-    def __int__(self):
+    def __init__(self):
         """int meth"""
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.format
                 (getenv('HBNB_MYSQL_USER'), getenv('HBNB_MYSQL_PWD'), 
