@@ -51,16 +51,23 @@ class BaseModel:
         self.updated_at = datetime.now()
         storage.new(self)
         storage.save()
+    def __str__(self):
+        """Returns a string representation of the object"""
+        return "[{}] ({}) {}".format(
+            self.__class__.__name__,
+            self.id,
+            self.to_dict()
+        )
 
     def to_dict(self):
         """Convert instance into dict format"""
         dictionary = {}
         dictionary.update(self.__dict__)
-        dictionary.update({'__class__':
-                          (str(type(self)).split('.')[-1]).split('\'')[0]})
+        dictionary.update({'__class__': type(self).__name__})
+                          #(str(type(self)).split('.')[-1]).split('\'')[0]})
         dictionary['created_at'] = self.created_at.isoformat()
         dictionary['updated_at'] = self.updated_at.isoformat()
-        if '_sa_instance_state' in dictionary.keys():
+        if '_sa_instance_state' in dictionary.keys:
             del dictionary ['_sa_instance_state']
         return dictionary
 
