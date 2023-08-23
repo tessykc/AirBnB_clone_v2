@@ -4,7 +4,7 @@ import cmd
 import sys
 from datetime import datetime
 from models.base_model import BaseModel, Base
-from models.engine.db_storage import DBStorage
+
 from models.__init__ import storage
 from models.user import User
 from models.place import Place
@@ -120,7 +120,7 @@ class HBNBCommand(cmd.Cmd):
        
         try:
             if not args:
-                raise SyntaxError("** class name missing **")
+                raise SyntaxError()
 
             # split arg into a list
             split_args = args.split(' ') 
@@ -152,7 +152,7 @@ class HBNBCommand(cmd.Cmd):
 
         # handle erro and exceptions
         except SyntaxError as e:
-            print(e)
+            print("** class name missing **")
         except NameError as e:
             print("** class doesn't exist **")
 
@@ -229,6 +229,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
+        obj = storage.all()
         print_list = []
 
         if args:
@@ -236,7 +237,7 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage._FileStorage__objects.items():
+            for k, v in obj.items():
                 if k.split('.')[0] == args:
                     print_list.append(str(v))
         else:
@@ -258,7 +259,7 @@ class HBNBCommand(cmd.Cmd):
                 count += 1
         print(count)
 
-    def help_count(self):
+     def help_count(self):
         """ """
         print("Usage: count <class_name>")
 
@@ -349,6 +350,22 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
+    @classmethod
+    def verify_attribute(cls, attribute):
+        """
+        Verify if the attribute is correctly formatted
+        """
+        if attribute[0] is attribute[-1] in ['"', "'"]:
+            return attribute.strip('"\'').replace('_', ' ').replace('\\', '"')
+        else:
+            try:
+                try:
+                    return int(attribute)
+                except ValueError:
+                    return float(attribute)
+            except ValueError:
+                return None
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
