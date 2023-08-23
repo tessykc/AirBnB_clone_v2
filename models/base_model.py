@@ -29,7 +29,7 @@ class BaseModel:
                 if key == 'created_at':
                     value = datetime.strptime(kwargs['created_at'], 
                             '%Y-%m-%dT%H:%M:%S.%f')
-                if key != __class__:
+                if key != '__class__':
                     setattr(self, key, value)
             
             if 'id' not in kwargs.keys():
