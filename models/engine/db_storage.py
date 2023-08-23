@@ -27,13 +27,15 @@ class DBStorage:
     def all(self, cls=None):
         """query the current db"""
         objects = {}
-        if cls is not None:
-            query = self.__session.query(cls).all()
-            for obj in query:
-                key = '{}.{}'.format(type(obj).__name__, obj.id)
-                objects[key] = obj
+        classes = [User, State, City, Amenity, Place, Review]
+
+        if cls:
+            if cls in classes:
+                query = self.__session.query(cls).all()
+                for obj in query:
+                    key = '{}.{}'.format(type(obj).__name__, obj.id)
+                    objects[key] = obj
         else:
-            classess = [User, State, City, Amenity, Place, Review]
             for cls in classess:
                 query = self.__session.query(cls).all()
                 for obj in query:
@@ -56,6 +58,7 @@ class DBStorage:
 
     def reload(self):
         """create all tb in the db"""
+        Base.metadata.bind = self.__engine
         Base.metadata.create_all(self.__engine)
         Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
         self.__session = scope_session(Session)
