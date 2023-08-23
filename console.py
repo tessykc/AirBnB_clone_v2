@@ -259,7 +259,7 @@ class HBNBCommand(cmd.Cmd):
                 count += 1
         print(count)
 
-     def help_count(self):
+    def help_count(self):
         """ """
         print("Usage: count <class_name>")
 
