@@ -30,10 +30,24 @@ class Place(BaseModel, Base):
     longitude = Column(Float)
     amenity_ids = []
 
+    def reviews(self):
+        """ relationship with the class Review """
+        if env.get('HBNB_TYPE_STORAGE') == 'db':
+            reviews = relationship("Review",
+                    cascade='all, delete', backref='place')
+            
+         """ getting reviews within the place id """
+        lis = [
+            r for k, v in model.storage.all(model.Review).items()
+              if r.id in self.place_id
+        ]
+        place_id = Place.id
+        return (ls)
+
     def amenities(self):
         """ relationship with the class Amenity """
         if env.get('HBNB_TYPE_STORAGE') == 'db':
-            amenities = relationshiprelationship("Amenity",
+            amenities = relationship("Amenity",
                     secondary=place_amenity, viewonly=False)
 
         """ getting amenities within the place id """
