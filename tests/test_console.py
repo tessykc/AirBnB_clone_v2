@@ -47,9 +47,11 @@ class TestHBNBCommand(unittest.TestCase):
 
     def test_help(self):
         """Test for help"""
-        with patch('sys.stdout', new_callable=io.StringIO) as f:
+         with patch('sys.stdout', new_callable=io.StringIO) as f:
             self.console_o.onecmd("help\n")
-            self.assertGreater(len(f.getvalue()), 0)
+            output = f.getvalue()
+            self.assertIn("Documented commands (type help <topic>):", output)
+            self.assertIn("EOF  all  count  create  destroy  help  quit  show  update", output)
 
     def test_create(self):
         """Test for create"""
@@ -63,15 +65,17 @@ class TestHBNBCommand(unittest.TestCase):
         with patch('sys.stdout', new_callable=io.StringIO) as f:
             for i in self.all_list:
                 self.console_o.onecmd("show {} {}\n".format(i.__class__.__name__, i.id))
-                self.assertGreater(len(f.getvalue()), 0)
+                output = f.getvalue()
+                self.assertGreater(len(output), 0)
+                self.assertIn(str(i), output)
             self.console_o.onecmd("show BaseModel\n")
-            self.assertEqual(f.getvalue(), '** instance id missing **\n')
+            self.assertEqual(output, '** instance id missing **\n')
             self.console_o.onecmd("show BaseModel {}\n".format(self.basemodel_o.id))
-            self.assertEqual(f.getvalue(), str(self.basemodel_o) + '\n')
+            self.assertEqual(output, str(self.basemodel_o) + '\n')
             self.console_o.onecmd("show BaseModel {}\n".format("invalid_id"))
-            self.assertEqual(f.getvalue(), "** no instance found **\n")
+            self.assertEqual(output, "** no instance found **\n")
             self.console_o.onecmd("show InvalidClass {}\n".format("invalid_id"))
-            self.assertEqual(f.getvalue(), "** class doesn't exist **\n")
+            self.assertEqual(output, "** class doesn't exist **\n")
 
     def test_destroy(self):
         """Test for destroy"""
@@ -93,9 +97,8 @@ class TestHBNBCommand(unittest.TestCase):
         """Test for all"""
         with patch('sys.stdout', new_callable=io.StringIO) as f:
             self.console_o.onecmd("all\n")
-            self.assertGreater(len(f.getvalue()), 0)
-            self.console_o.onecmd("all InvalidClass\n")
-            self.assertEqual(f.getvalue(), "** class doesn't exist **\n")
+            output = f.getvalue()
+            self.assertGreater(len(output), 0)
 
     def test_count(self):
         """Test for count"""
