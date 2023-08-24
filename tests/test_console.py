@@ -1,15 +1,10 @@
 #!/usr/bin/python3
 """Test for HBNBCommand class (console.py)"""
 import unittest
-from io import StringIO
-import pep8
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import json
-import sys
-import io
-import os
+from unittest.mock import patch
 from console import HBNBCommand
 from models import storage
 from models.base_model import BaseModel
@@ -146,15 +141,15 @@ class TestHBNBCommand(unittest.TestCase):
 
     def test_quit(self):
         """Test for quit"""
-        with self.assertRaises(SystemExit): #patch('sys.stdout', new_callable=io.StringIO) as f:
+        with self.assertRaises(SystemExit), patch('sys.stdout', new_callable=io.StringIO) as f:
             self.console_o.onecmd("quit")
             self.assertGreater(len(f.getvalue()), 0)
 
     def test_EOF(self):
         """Test for EOF"""
-        with self.assertRaises(SystemExit): #patch('sys.stdout', new_callable=io.StringIO) as f:
+        with self.assertRaises(SystemExit), patch('sys.stdout', new_callable=io.StringIO) as f:
             self.console_o.onecmd("EOF")
-            #self.assertGreater(len(f.getvalue()), 0)
+            self.assertGreater(len(f.getvalue()), 0)
 
     def test_unknown(self):
         """Test for unknown commands"""
