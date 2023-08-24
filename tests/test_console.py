@@ -3,6 +3,7 @@
 import unittest
 import sys
 import os
+import io
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from unittest.mock import patch
 from console import HBNBCommand
