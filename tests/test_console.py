@@ -1,6 +1,12 @@
 #!/usr/bin/python3
 """Test for HBNBCommand class (console.py)"""
 import unittest
+from io import StringIO
+import pep8
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import json
 import sys
 import io
 import os
