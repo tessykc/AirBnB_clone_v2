@@ -47,7 +47,7 @@ class TestHBNBCommand(unittest.TestCase):
 
     def test_help(self):
         """Test for help"""
-         with patch('sys.stdout', new_callable=io.StringIO) as f:
+        with patch('sys.stdout', new_callable=io.StringIO) as f:
             self.console_o.onecmd("help\n")
             output = f.getvalue()
             self.assertIn("Documented commands (type help <topic>):", output)
