@@ -10,7 +10,7 @@ class State(BaseModel):
     __tablename__ = 'states'
     name = Column(String(128), nullable=False)
     
-    if models.storage_type == 'db':
+    if HBNB_TYPE_STORAGE == 'db':
         from models import storage
         cities = relationship('City', 
                 cascade='all, delete', backref='state')
