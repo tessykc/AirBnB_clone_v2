@@ -49,6 +49,7 @@ class DBStorage:
                    'Review': Review}
         
         if cls is None:
+            classes = [User, State, City, Amenity, Place, Review]
             objs = []
             for c in classes.values():
                 objs.extend(self.__session.query(c).all())
