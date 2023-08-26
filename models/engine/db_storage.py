@@ -44,7 +44,7 @@ class DBStorage:
         """ 
         result = {}
         if cls in self.__classes:
-            val = DBStorage.__session.query(i)
+            val = DBStorage.__session.query(cls)
             for obj in val:
                 key = "{}.{}".format(obj.__class__.__name__, obj.id)
                 result[key] = obj
