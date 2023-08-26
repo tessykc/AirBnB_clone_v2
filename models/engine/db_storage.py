@@ -48,7 +48,7 @@ class DBStorage:
             for obj in val:
                 key = "{}.{}".format(obj.__class__.__name__, obj.id)
                 result[key] = value
-        else cls is None:
+        elif cls is None:
             for i in self.classes:
                     val = DBStorage.__session.query(i)
                     for obj in val:
