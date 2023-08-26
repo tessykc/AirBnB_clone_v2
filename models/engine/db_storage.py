@@ -18,7 +18,7 @@ class DBStorage:
     """
     This class manages storage of hbnb models using SQLAlchemy
     """
-     __classes = [State, City, User, Place, Review, Amenity]
+    __classes = [State, City, User, Place, Review, Amenity]
     __engine = None
     __session = None
 
