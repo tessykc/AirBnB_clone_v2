@@ -36,26 +36,18 @@ class DBStorage:
         Query on the current database session 
         all objects depending on class name
         """
-
-        from models.base_model import BaseModel, Base
-        from models.user import User
-        from models.state import State
-        from models.city import City
-        from models.amenity import Amenity
-        from models.place import Place
-        from models.review import Review
-
-        classes = {'BaseModel': BaseModel, 'User': User, 'State': State,
-                   'City': City, 'Amenity': Amenity, 'Place': Place,
-                   'Review': Review}
-        
-        if cls is None:
-            objs = []
-            for c in classes.values():
-                objs.extend(self.__session.query(c).all())
+        from models import classes
+        result = {}
+        if cls:
+            for key, value in self.__session.query(classes[cls]).all():
+                result[key] = value
         else:
-            objs = self.__session.query(cls).all()
-        return {"{}.{}".format(type(obj).__name__, obj.id): obj for obj in objs}
+            for key, value in classes.items():
+                if value.__name__ != 'BaseModel':
+                    for obj in self.__session.query(value).all():
+                        key = "{}.{}".format(obj.__class__.__name__, obj.id)
+                        result[key] = obj
+        return result
 
     def new(self, obj):
         """
