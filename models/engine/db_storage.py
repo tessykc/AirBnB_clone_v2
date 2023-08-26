@@ -47,17 +47,14 @@ class DBStorage:
         classes = {'BaseModel': BaseModel, 'User': User, 'State': State,
                    'City': City, 'Amenity': Amenity, 'Place': Place,
                    'Review': Review}
-        result = {}
-        if cls:
-            for key, value in self.__session.query(classes[cls]).all():
-                result[key] = value
+        
+        if cls is None:
+            objs = []
+            for c in classes.values():
+                objs.extend(self.__session.query(c).all())
         else:
-            for key, value in classes.items():
-                if value.__name__ != 'BaseModel':
-                    for obj in self.__session.query(value).all():
-                        key = "{}.{}".format(obj.__class__.__name__, obj.id)
-                        result[key] = obj
-        return result
+            objs = self.__session.query(cls).all()
+        return {"{}.{}".format(type(obj).__name__, obj.id): obj for obj in objs}
 
     def new(self, obj):
         """
