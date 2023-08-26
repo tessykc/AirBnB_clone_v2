@@ -18,8 +18,7 @@ class DBStorage:
     """
     This class manages storage of hbnb models using SQLAlchemy
     """
-    __classes = [State, City, User, Place, Review, Amenity]
-    classes = {cls.__name__: cls for cls in __classes}
+   # __classes = [State, City, User, Place, Review, Amenity]
     __engine = None
     __session = None
 
@@ -43,6 +42,12 @@ class DBStorage:
         Query on the current database session 
         all objects depending on class name
         """
+        classes = {"State": State,
+                    "City": City,
+                    "User": User,
+                    "Place": Place,
+                    "Review": Review,
+                    "Amenity": Amenity}
         result = {}
         if cls:
             for key, value in self.__session.query(classes[cls]).all():
