@@ -47,7 +47,7 @@ class DBStorage:
             val = DBStorage.__session.query(i)
             for obj in val:
                 key = "{}.{}".format(obj.__class__.__name__, obj.id)
-                result[key] = value
+                result[key] = obj
         elif cls is None:
             for i in self.__classes:
                     val = DBStorage.__session.query(i)
