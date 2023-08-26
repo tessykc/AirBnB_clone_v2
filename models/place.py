@@ -35,52 +35,29 @@ class Place(BaseModel, Base):
             back_populates="place_amenities", viewonly=False)
     reviews = relationship("Review", backref="place", cascade="all, delete")0
     """
+    
+    @property
+    def reviews(self):
+        """ Getter attribute to list all linked reviews """
+        import models *
+        reviews_list = []
+        for review in list(models.storage.all(Review).values()):
+            if review.place_id == self.id:
+                reviews_list.append(review)
+        return reviews_list
 
-    if models.storage_t == 'db':
-        @property
-        def reviews(self):
-            """ Getter attribute to list all linked reviews """
-            reviews_list = []
-            for review in list(models.storage.all(Review).values()):
-                if review.place_id == self.id:
-                    reviews_list.append(review)
-            return reviews_list
+    @property
+    def amenities(self):
+        """ Getter attribute to list all linked amenities """
+        import models *
+        amenities_list = []
+        for amenity in list(models.storage.all(Amenity).values()):
+            if amenity.id in self.amenity_ids:
+                amenities_list.append(amenity)
+        return amenities_list
 
-        @property
-        def amenities(self):
-            """ Getter attribute to list all linked amenities """
-            amenities_list = []
-            for amenity in list(models.storage.all(Amenity).values()):
-                if amenity.id in self.amenity_ids:
-                    amenities_list.append(amenity)
-            return amenities_list
-
-        @amenities.setter
-        def amenities(self, obj):
-            """ Setter attribute to append amenity id to amenity_ids """
-            if isinstance(obj, Amenity):
-                self.amenity_ids.append(obj.id)
-    else:
-        @property
-        def reviews(self):
-            """ Getter attribute to list all linked reviews """
-            reviews_list = []
-            for review in list(models.storage.all(Review).values()):
-                if review.place_id == self.id:
-                    reviews_list.append(review)
-            return reviews_list
-
-        @property
-        def amenities(self):
-            """ Getter attribute to list all linked amenities """
-            amenities_list = []
-            for amenity in list(models.storage.all(Amenity).values()):
-                if amenity.id in self.amenity_ids:
-                    amenities_list.append(amenity)
-            return amenities_list
-
-        @amenities.setter
-        def amenities(self, obj):
-            """ Setter attribute to append amenity id to amenity_ids """
-            if isinstance(obj, Amenity):
-                self.amenity_ids.append(obj.id)
+    @amenities.setter
+    def amenities(self, obj):
+        """ Setter attribute to append amenity id to amenity_ids """
+        if isinstance(obj, Amenity):
+            self.amenity_ids.append(obj.id)
