@@ -6,13 +6,19 @@ from os import getenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import BaseModel, Base
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
 
 class DBStorage:
     """
     This class manages storage of hbnb models using SQLAlchemy
     """
-
+     __classes = [State, City, User, Place, Review, Amenity]
     __engine = None
     __session = None
 
@@ -36,7 +42,6 @@ class DBStorage:
         Query on the current database session 
         all objects depending on class name
         """
-        from models import classes
         result = {}
         if cls:
             for key, value in self.__session.query(classes[cls]).all():
