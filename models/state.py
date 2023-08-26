@@ -13,7 +13,7 @@ class State(BaseModel, Base):
     __tablename__ = 'states'
     name = Column(String(128), nullable=False)
     
-    if storage.storage_type == 'db':
+    if type(storage) == models.engine.db_storage.DBStorage:
         cities = relationship('City', cascade='all, delete', backref='state')
     else:
         @property
