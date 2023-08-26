@@ -43,13 +43,13 @@ class DBStorage:
         all objects depending on class name
         """ 
         result = {}
-        if cls in self.classes:
+        if cls in self.__classes:
             val = DBStorage.__session.query(i)
             for obj in val:
                 key = "{}.{}".format(obj.__class__.__name__, obj.id)
                 result[key] = value
         elif cls is None:
-            for i in self.classes:
+            for i in self.__classes:
                     val = DBStorage.__session.query(i)
                     for obj in val:
                         key = "{}.{}".format(obj.__class__.__name__, obj.id)
