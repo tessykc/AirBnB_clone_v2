@@ -31,9 +31,10 @@ class Place(BaseModel, Base):
     )
 
     # Define the relationships
-    amenities = relationship("Amenity", secondary=place_amenity, 
+    """amenities = relationship("Amenity", secondary=place_amenity, 
             back_populates="place_amenities", viewonly=False)
-    reviews = relationship("Review", backref="place", cascade="all, delete")
+    reviews = relationship("Review", backref="place", cascade="all, delete")0
+    """
 
     if models.storage_t == 'db':
         @property
