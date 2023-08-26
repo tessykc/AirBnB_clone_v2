@@ -44,12 +44,12 @@ class DBStorage:
         from models.amenity import Amenity
         from models.place import Place
         from models.review import Review
+
         classes = {'BaseModel': BaseModel, 'User': User, 'State': State,
                    'City': City, 'Amenity': Amenity, 'Place': Place,
                    'Review': Review}
         
         if cls is None:
-            classes = [User, State, City, Amenity, Place, Review]
             objs = []
             for c in classes.values():
                 objs.extend(self.__session.query(c).all())
