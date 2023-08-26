@@ -40,6 +40,7 @@ class DBStorage:
         Session = scoped_session(sessionmaker(bind=self.__engine,
                                               expire_on_commit=False))
         self.__session = Session()
+        self.__session.configure(bind=self.__engine)
 
     def all(self, cls=None):
         """
