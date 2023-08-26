@@ -36,28 +36,26 @@ class DBStorage:
 
         if getenv('HBNB_ENV') == 'test':
             Base.metadata.drop_all(self.__engine)
-
-        Session = scoped_session(sessionmaker(bind=self.__engine,
-                                              expire_on_commit=False)) 
+ 
 
     def all(self, cls=None):
         """
         Query on the current database session 
         all objects depending on class name
         """ 
-        result = {}
+        class_dict = {}
         if cls in self.__classes:
-            val = DBStorage.__session.query(cls)
-            for obj in val:
+            result = DBStorage.__session.query(cls)
+            for obj in result:
                 key = "{}.{}".format(obj.__class__.__name__, obj.id)
-                result[key] = obj
+                class_dict[key] = obj
         elif cls is None:
-            for i in self.__classes:
-                    val = DBStorage.__session.query(i)
-                    for obj in val:
+            for cl in self.__classes:
+                    result = DBStorage.__session.query(cl)
+                    for obj in result:
                         key = "{}.{}".format(obj.__class__.__name__, obj.id)
-                        result[key] = obj
-        return result
+                        class_dict[key] = obj
+        return class_dict
 
     def new(self, obj):
         """
