@@ -18,6 +18,7 @@ class DBStorage:
     """
     This class manages storage of hbnb models using SQLAlchemy
     """
+    __classes = [State, City, User, Place, Review, Amenity]
     __engine = None
     __session = None
 
@@ -42,23 +43,19 @@ class DBStorage:
         Query on the current database session 
         all objects depending on class name
         """ 
-        cl_name = {"State": State,
-                    "City": City,
-                    "User": User,
-                    "Place": Place,
-                    "Review": Review,
-                    "Amenity": Amenity}
-        obj = {}
-        cls_value = [value for key, value in cl_name.items()]
-        if cls:
-            if type(cls) == str:
-                cls = cl_name[cls]
-            cls_value = [cls]
-        for one_class in cls_value:
-            for value in self.__session.query(one_class):
-                key = str(value.__class__.__name__) + "." + str(value.id)
-                obj[key] = value
-        return obj
+        my_dict = {}
+        if cls in self.__classes:
+            result = self.__session.query(cls)
+            for row in result:
+                key = "{}.{}".format(row.__class__.__name__, row.id)
+                my_dict[key] = row
+        elif cls is None:
+            for cl in self.__classes:
+                result = self.__session.query(cl)
+                for row in result:
+                    key = "{}.{}".format(row.__class__.__name__, row.id)
+                    my_dict[key] = row
+        return my_dict
 
     def new(self, obj):
         """
@@ -85,13 +82,6 @@ class DBStorage:
         create the current database session
         """
         Base.metadata.create_all(self.__engine)
-        session_factory = sessionmaker(bind=self.__engine,
-                                              expire_on_commit=False)
-        Session = scoped_session(session_factory)
-        self.__session = scoped_session(Session)
-
-    def close(self):
-        """
-        Remove the method on the private session attribute
-        """
-        self.__session.close()
+        Session = scoped_session(sessionmaker(bind=self.__engine,
+                                              expire_on_commit=False))
+        self.__session = Session()
