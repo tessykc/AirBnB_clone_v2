@@ -18,7 +18,6 @@ class DBStorage:
     """
     This class manages storage of hbnb models using SQLAlchemy
     """
-    __classes = [State, City, User, Place, Review, Amenity]
     __engine = None
     __session = None
 
@@ -34,7 +33,7 @@ class DBStorage:
                                              getenv('HBNB_MYSQL_DB')),
                                       pool_pre_ping=True)
 
-        if getenv('HBNB_ENV') == 'test':
+        if os.getenv('HBNB_ENV') == 'test':
             Base.metadata.drop_all(self.__engine)
  
 
@@ -43,19 +42,23 @@ class DBStorage:
         Query on the current database session 
         all objects depending on class name
         """ 
-        class_dict = {}
-        if cls in self.__classes:
-            result = DBStorage.__session.query(cls)
-            for obj in result:
-                key = "{}.{}".format(obj.__class__.__name__, obj.id)
-                class_dict[key] = obj
-        elif cls is None:
-            for cl in self.__classes:
-                    result = DBStorage.__session.query(cl)
-                    for obj in result:
-                        key = "{}.{}".format(obj.__class__.__name__, obj.id)
-                        class_dict[key] = obj
-        return class_dict
+        cl_name = {"State": State,
+                    "City": City,
+                    "User": User,
+                    "Place": Place,
+                    "Review": Review,
+                    "Amenity": Amenity}
+        obj = {}
+        cls_value = [value for key, value in cl_name.items()]
+        if cls:
+            if type(cls) == str:
+                cls = cl_name[cls]
+            cls_value = [cls]
+        for one_class in cls_value:
+            for value in self.__session.query(one_class):
+                key = str(value.__class__.__name__) + "." + str(value.id)
+                obj[key] = value
+        return obj
 
     def new(self, obj):
         """
@@ -82,6 +85,13 @@ class DBStorage:
         create the current database session
         """
         Base.metadata.create_all(self.__engine)
-        Session = scoped_session(sessionmaker(bind=self.__engine,
-                                              expire_on_commit=False))
-        self.__session = Session()  
+        session_factory = sessionmaker(bind=self.__engine,
+                                              expire_on_commit=False)
+        Session = scoped_session(session_factory)
+        self.__session = scoped_session(Session)
+
+    def close(self):
+        """
+        Remove the method on the private session attribute
+        """
+        self.__session.close()
