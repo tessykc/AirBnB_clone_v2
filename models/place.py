@@ -22,42 +22,25 @@ class Place(BaseModel, Base):
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
 
-    # Define the Many-To-Many relationship table
-    place_amenity = Table(
-        'place_amenity',
-        Base.metadata,
-        Column('place_id', String(60), ForeignKey('places.id'), primary_key=True, nullable=False),
-        Column('amenity_id', String(60), ForeignKey('amenities.id'), primary_key=True, nullable=False)
-    )
+    if models.storage_t == 'db':
+        metadata = Base.metadata
+        place_amenity = Table(
+            'place_amenity',
+            metadata,
+            Column('place_id', String(60), ForeignKey('places.id'),
+                   primary_key=True, nullable=False),
+            Column('amenity_id', String(60), ForeignKey('amenities.id'),
+                   primary_key=True, nullable=False)
+        )
+        amenities = relationship("Amenity", secondary=place_amenity,
+                                 viewonly=False)
+    else:
+        @property
+        def amenities(self):
+            return [amenity for amenity in models.storage.all(Amenity)
+                    if amenity.id in self.amenity_ids]
 
-    # Define the relationships
-    """amenities = relationship("Amenity", secondary=place_amenity, 
-            back_populates="place_amenities", viewonly=False)
-    reviews = relationship("Review", backref="place", cascade="all, delete")0
-    """
-    
-    @property
-    def reviews(self):
-        """ Getter attribute to list all linked reviews """
-        import models *
-        reviews_list = []
-        for review in list(models.storage.all(Review).values()):
-            if review.place_id == self.id:
-                reviews_list.append(review)
-        return reviews_list
-
-    @property
-    def amenities(self):
-        """ Getter attribute to list all linked amenities """
-        import models *
-        amenities_list = []
-        for amenity in list(models.storage.all(Amenity).values()):
-            if amenity.id in self.amenity_ids:
-                amenities_list.append(amenity)
-        return amenities_list
-
-    @amenities.setter
-    def amenities(self, obj):
-        """ Setter attribute to append amenity id to amenity_ids """
-        if isinstance(obj, Amenity):
-            self.amenity_ids.append(obj.id)
+        @amenities.setter
+        def amenities(self, obj):
+            if isinstance(obj, Amenity):
+                self.amenity_ids.append(obj.id)
