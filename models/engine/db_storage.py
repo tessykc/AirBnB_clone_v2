@@ -37,13 +37,12 @@ class DBStorage:
 
         if os.getenv('HBNB_ENV') == 'test':
             Base.metadata.drop_all(self.__engine)
- 
 
     def all(self, cls=None):
         """
-        Query on the current database session 
+        Query on the current database session
         all objects depending on class name
-        """ 
+        """
         my_dict = {}
         if cls in self.__classes:
             result = self.__session.query(cls)
@@ -79,7 +78,7 @@ class DBStorage:
 
     def reload(self):
         """
-        Create all tables in the database and 
+        Create all tables in the database and
         create the current database session
         """
         Base.metadata.create_all(self.__engine)
