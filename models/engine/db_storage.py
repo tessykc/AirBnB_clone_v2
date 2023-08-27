@@ -45,13 +45,13 @@ class DBStorage:
         """
         my_dict = {}
         if cls in self.__classes:
-            result = self.__session.query(cls)
+            result = DBStorage.__session.query(cls)
             for row in result:
                 key = "{}.{}".format(row.__class__.__name__, row.id)
                 my_dict[key] = row
         elif cls is None:
             for cl in self.__classes:
-                result = self.__session.query(cl)
+                result = DBStorage.__session.query(cl)
                 for row in result:
                     key = "{}.{}".format(row.__class__.__name__, row.id)
                     my_dict[key] = row
