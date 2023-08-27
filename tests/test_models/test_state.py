@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" """
+"""city test model all test """
 from datetime import datetime
 import inspect
 import models
