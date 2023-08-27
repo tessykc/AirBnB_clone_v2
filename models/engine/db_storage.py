@@ -2,7 +2,7 @@
 """
 DBStorage module for HBNB project
 """
-from os import getenv
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import BaseModel, Base
