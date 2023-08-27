@@ -31,7 +31,7 @@ class BaseModel:
                     return (value)
                 if key != '__class__':
                     setattr(self, key, value)
-            
+
             if 'id' not in kwargs.keys():
                 self.id = str(uuid.uuid4())
             if 'created_at' not in kwargs.keys():
