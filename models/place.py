@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
-from models.amenity import Amenity
+
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
@@ -51,9 +51,4 @@ class Place(BaseModel, Base):
         @amenities.setter
         def amenities(self, obj=None):
             if obj is not None and type(obj) is Amenity:
-                self.amenity_ids.append(obj.id)
-
-    def add_amenity(self, amenity):
-        """Add an Amenity to the place's amenities"""
-        if isinstance(amenity, Amenity):
-            self.amenity_ids.append(amenity.id)
+                self.amenity_ids.append(obj.id) 
