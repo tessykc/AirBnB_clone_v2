@@ -4,7 +4,6 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
 import os
-from models.amenity import Amenity
 
 place_amenity = Table('place_amenity', Base.metadata,
                       Column('place_id', String(60), ForeignKey('places.id')),
@@ -51,4 +50,9 @@ class Place(BaseModel, Base):
         @amenities.setter
         def amenities(self, obj=None):
             if obj is not None and type(obj) is Amenity:
-                self.amenity_ids.append(obj.id) 
+                self.amenity_ids.append(obj.id)
+
+    def add_amenity(self, amenity):
+        """Add an Amenity to the place's amenities"""
+        if isinstance(amenity, Amenity):
+            self.amenity_ids.append(amenity.id)
