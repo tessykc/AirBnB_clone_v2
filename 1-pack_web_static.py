@@ -7,6 +7,7 @@ from fabric.api import local
 from datetime import datetime
 import os
 
+
 def do_pack():
     """
     compress file
@@ -20,6 +21,7 @@ def do_pack():
         return "versions/{}".format(archive_name)
     else:
         return None
+
 
 if __name__ == "__main__":
     archive_path = do_pack()
