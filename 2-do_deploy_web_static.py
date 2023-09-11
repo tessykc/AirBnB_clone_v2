@@ -5,7 +5,7 @@ distributes an archive to your web servers, using the function
 do_deploy
 """
 
-from fabric.api import *
+from fabric.api import put, run, env
 from os.path import exists
 
 env.hosts = ['54.89.117.155', '34.229.137.26']
