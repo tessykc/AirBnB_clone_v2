@@ -6,7 +6,7 @@ do_deploy
 """
 
 from fabric.api import *
-import os.path import exists
+from os.path import exists
 
 env.hosts = ['54.89.117.155', '34.229.137.26']
 """env.user = 'ubuntu'
