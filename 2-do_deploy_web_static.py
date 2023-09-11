@@ -9,7 +9,8 @@ from fabric.api import *
 import os
 
 env.hosts = ['54.89.117.155', '34.229.137.26']
-env.user = 'ubuntu'
+"""env.user = 'ubuntu'
+env.key_filename = '/home/deepanon/.ssh/id_rsa'"""
 
 
 def do_deploy(archive_path):
