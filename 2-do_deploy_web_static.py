@@ -8,7 +8,7 @@ do_deploy
 from fabric.api import put, run, env
 from os.path import exists
 
-env.hosts = ['54.89.117.155','34.229.137.26']
+env.hosts = ['54.89.117.155', '34.229.137.26']
 env.user = 'ubuntu'
 env.key_filename = "~/.ssh/id_rsa"
 
@@ -34,5 +34,5 @@ def do_deploy(archive_path):
         
         print("New version deployed!")
         return True
-    except Exception as e:
+    except:
         return False
