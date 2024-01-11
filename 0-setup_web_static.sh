@@ -8,16 +8,22 @@ sudo apt-get -y install nginx
 sudo mkdir -p /data/web_static/releases/test /data/web_static/shared
 
 # Create a fake HTML file
-echo "Holberton School" | sudo tee /data/web_static/releases/test/index.html
+echo "<html><head></head><body>Test Page Holberton School</body></html>" | sudo tee /data/web_static/releases/test/index.html > /dev/null
 
 # Create or update the symbolic link
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
-# Change ownership of directories
-sudo chown -hR ubuntu:ubuntu /data/
+# Change ownership to ubuntu user and group
+sudo chown -R ubuntu:ubuntu /data/
 
 # Update Nginx configuration
-sudo sed -i '38i\\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n' /etc/nginx/sites-available/default
+config_block="location /hbnb_static { 
+  alias /data/web_static/current/;
+  index index.html;
+  }
+  "
+sudo sed -i "/server {/a $config_block" /etc/nginx/sites-available/default
 
-sudo service nginx start
+# Restart Nginx
+sudo service nginx restart
 exit 0
