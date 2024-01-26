@@ -22,7 +22,7 @@ def hbnb():
 
 @app.route('/c/<text>', strict_slashes=False)
 def c_route(text):
-    """ Display  underscores with spaces in the text"""
+    """ Replace  underscores with spaces in the text"""
     text = text.replace("_", " ")
     return 'C {}'.format(text)
 
