@@ -5,10 +5,19 @@ sudo apt-get -y upgrade
 sudo apt-get -y install nginx
 
 # Create necessary directories
-sudo mkdir -p /data/web_static/releases/test /data/web_static/shared
+sudo mkdir -p /data/web_static/releases/test 
+sudo mkdir -p /data/web_static/shared
+sudo chown -R ubuntu:ubuntu /data
 
 # Create a fake HTML file
-echo "<html><head></head><body>Test Page Holberton School</body></html>" | sudo tee /data/web_static/releases/test/index.html > /dev/null
+echo "<html>
+  <head>
+    <title>Test Page</title>
+  </head>
+  <body>
+    <p>This is a test page for web_static deployment.</p>
+  </body>
+</html>" | sudo tee /data/web_static/releases/test/index.html > /dev/null
 
 # Create or update the symbolic link
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
