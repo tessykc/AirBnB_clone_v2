@@ -8,7 +8,7 @@ do_deploy
 from fabric.api import put, run, env
 from os.path import exists
 
-env.hosts = ['54.89.117.155', '34.229.137.26']
+env.hosts = ['54.174.92.204', '54.172.150.212']
 env.user = 'ubuntu'
 env.key_filename = "~/.ssh/id_rsa"
 
@@ -20,19 +20,28 @@ def do_deploy(archive_path):
     if exists(archive_path) is False:
         return False
     try:
-        file_n = archive_path.split("/")[-1]
-        no_ext = file_n.split(".")[0]
-        path = "/data/web_static/releases/"
+        # Upload the archive to /tmp/ directory on the web server
         put(archive_path, '/tmp/')
-        run('sudo mkdir -p {}{}/'.format(path, no_ext))
-        run('sudo tar -xzf /tmp/{} -C {}{}/'.format(file_n, path, no_ext))
-        run('sudo rm /tmp/{}'.format(file_n))
-        run('sudo mv {0}{1}/web_static/* {0}{1}/'.format(path, no_ext))
-        run('sudo rm -rf {}{}/web_static'.format(path, no_ext))
-        run('sudo rm -rf /data/web_static/current')
-        run('sudo ln -s {}{}/ /data/web_static/current'.format(path, no_ext))
-        
-        """print("New version deployed!")"""
+
+        # Extract archive to /data/web_static/releases/<archive filename without extension>
+        archive_filename = archive_path.split('/')[-1]
+        folder_name = archive_filename.split('.')[0]
+        release_path = f'/data/web_static/releases/{folder_name}'
+        run(f'mkdir -p {release_path} && tar -xzf /tmp/{archive_filename} -C {release_path}')
+
+        # Delete the uploaded archive from the web server
+        run(f'rm /tmp/{archive_filename}')
+
+        # Remove the current symbolic link
+        run('rm -rf /data/web_static/current')
+
+        # Create a new symbolic link to the new version
+        run(f'ln -s {release_path} /data/web_static/current')
+
+        print("New version deployed successfully!")
         return True
+    except Exception as e:
+        print(f"Deployment failed: {e}")
+        return False
     except:
         return False
